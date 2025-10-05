@@ -2,7 +2,7 @@
 # 1. UART:
 UART is one of the most widely used serial communication protocols in embedded systems and digital design. It facilitates async communication between devices using two lines: Trasmit(TX) and Receive (RX). Unlike sync protocols UART dose'nt require shared clock between sender and receiver making it ideal for low-speed, short distance data exchange.
 
-# 1.1. Project Objectives:
+## 1.1. Project Objectives:
 The objective of this project is to design a complete UART module in Verilog,
 consisting of Transmitter and Receiver units, FIFO buffers for data handling and a baud rate generator for controlling data transmission speed. The design aims to be synthesizable, parameterrized and ready for FPGA implementation. 
 
