@@ -1,18 +1,4 @@
-# UART.v
 
-# TX.v
-
-# RX.v
-
-# TX_TOP.V
-
-# RX_TOP.v
-
-# baud_gen.v
-
-# FIFO.V
-
-uart_tb.v 
 # 1. UART:
 UART is one of the most widely used serial communication protocols in embedded systems and digital design. It facilitates async communication between devices using two lines: Trasmit(TX) and Receive (RX). Unlike sync protocols UART dose'nt require shared clock between sender and receiver making it ideal for low-speed, short distance data exchange.
 
