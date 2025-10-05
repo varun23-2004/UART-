@@ -38,15 +38,15 @@ Oversampling allows:
 UART modules typically use a system clock to derive the baud rate using a frequency divider. However, since the divisor must be an integer, the actual baud rate may not exactly match the desired one, causing a baud rate error. This discrepancy introduces timing mismatches, especially over long frames and can impact receiver sampling accuracy.
 To minimize error:Choose system clock values that align well with common baud rates, allows configurable baud rates to adjust real-world tolerances. Implement receiver oversampling and edge detection to recover from small mismatches.
 
-# System Design
-## Block Diagram 
+# 3 System Design
+## 3.1 Block Diagram 
 The system consists of modular blocks integrated to form a complete UART communication interface. The high-level architecture includes:
 1) UART Transmitter
 2) UART Receiver
 3) Baud Rate Generator
 4) FIFO Buffers
 5) Top-level Integration module
-## Design Parameters 
+## 3.2 Design Parameters 
 The UART module is desgined with several configurable parameters to enhance reuseablity and adaptability across various system requirements. The main parameters are as follows:
 1) BAUD_RATE= 921600: Defines the baud rate used for data transmission and reception.
 2) OVERSAMPLE = 16: Sets the oversampling rate for the receiver to improve sampling accuracy.
