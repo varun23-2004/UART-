@@ -95,5 +95,5 @@ The test suite consists of **8 comprehensive regression scenarios** verified seq
 |    5   | **SINGLE_BIT_SET**        | Verify boundary data patterns by transmitting only the minimum and maximum single-bit values (`8'h01` and `8'h80`).       |         2         |
 |    6   | **CONSECUTIVE_BYTES**     | Continuously transmit back-to-back data bytes to verify FSM recovery, buffering, and sequential processing.               |         6         |
 |    7   | **IMMEDIATE_START_BURST** | Initiate zero-latency burst transmission to maximize throughput and expose clock-domain or timing race conditions.        |         5         |
-|    8   | **LONG_IDLE_TEST**        | Insert a 20,000 ns idle period between packets to verify receiver wake-up and synchronization after prolonged inactivity. |         1         |
+|    8   | **LONG_IDLE_TEST**        | Insert a 5,000 ns idle period between packets to verify receiver wake-up and synchronization after prolonged inactivity. |         1         |
 
