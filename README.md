@@ -35,12 +35,47 @@ The accompanying verification environment is built from the ground up using an *
 * **Deterministic Timing Hardening:** Rigid timeline synchronization utilizing explicit time units (`#5000ns;`) within the driver loop, ensuring predictable inter-packet line delays regardless of varying simulator tool default precisions (ps vs. ns).
 * **Self-Purging Metric Gating:** Dynamic mailbox and internal tracking resets executed between sequential tests, preventing residual data pollution and enabling true automated regression sign-off.
 
-## IV. System Architecture
+---
 
-### 1. UART Design Under Test (DUT) Internals
+## IV. Architectural Deep-Dive
 
-### 2. Testbench Environment Top Block
-![UART Verification VIP Architecture](uart_architecture.png)
+### 1. RTL Hardware Design Blocks
+The UART hardware core is written in synthesizable Verilog and uses an asynchronous, decoupled microarchitecture. It consists of three primary custom design blocks:
+
+#### A. Baud Rate Generator
+* **Role:** Operates as a precise clock-divider module.
+* **Functionality:** It samples the high-frequency master system clock (`UCLK`) and down-divides it to create a lower-frequency baud tick (`BCLK`). This clock pulse matches standard data transmission frequencies (e.g., 9600, 115200 baud) and determines the exact rate at which bits are shifted onto or sampled from the physical wire.
+
+#### B. Transmit Pipeline (TX_TOP)
+* **TX_FIFO:** A synchronous FIFO memory block that buffers parallel input data bytes written from the system bus via `W_data[7:0]`. It asserts the `tx_full` status flag to signal the driver to stop writing when its capacity is reached.
+* **TX Controller Core:** Fetches parallel data from the FIFO's output port, maps it to a standard UART frame format, and uses an internal shift register clocked by `BCLK` to serialize the bits out onto the physical `tx` pin.
+
+#### C. Receive Pipeline (RX_TOP)
+* **RX Controller Core:** Constantly sniffs the physical input `rx` line for a falling edge transition, which marks a valid **Start Bit**. Once detected, it systematically samples the incoming serial bitstream, checks for a valid **Stop Bit**, converts the frames back into a parallel 8-bit byte, and pushes it into the receive queue.
+* **RX_FIFO:** A synchronous FIFO queue that temporarily accumulates incoming parallel bytes. It provides the `rx_empty` flag to alert external master blocks that data is available. 
+* **Underflow Masking Logic:** Built directly into the FIFO reading data path. If an illegal read strobe (`rd_uart`) is forced while `rx_empty` is active, this hardware safety hook instantly drives the parallel output data lines to `8'h00` to prevent uninitialized memory junk from escaping into the system.
+
+---
+
+### 2. Verification Environment Blocks
+The Verification IP framework is engineered using an Object-Oriented Programming (OOP) class structure in SystemVerilog. It abstracts signal toggling into separate tasks to verify the hardware without deadlocks.
+
+#### A. Generator (gen)
+* **Role:** The test scenario strategist.
+* **Functionality:** Contains specialized, isolated procedural loops for each of the 8 unique regression scenarios. It constructs raw transaction objects (`uart_transaction`), populates their inner data properties deterministically based on the active test type, and loads them into the `gen2drv` and `gen2scb` communication mailboxes.
+
+#### B. Driver (drv)
+* **Role:** The testbench pin-level actuator.
+* **Functionality:** Unpacks transaction objects from the `gen2drv` mailbox and drives the virtual physical pins (`W_data`, `wr_uart`, `rd_uart`) in perfect synchronization with the master clock domain (`UCLK`). It includes custom processing exceptions, such as zero-delay burst streaming blocks and dedicated inter-packet timeline delay logic (`#20000ns;`) to properly isolate the physical `tx_rx` wire into true line-idle states.
+
+#### C. Monitor (mon)
+* **Role:** The objective wire observer.
+* **Functionality:** Completely passive and decoupled from the driver. It sniffs the active physical lines (`tx_rx`) and control strobes right off the virtual interface. The moment it detects hardware handshake activity, it reconstructs the pin-level signals back into an abstract transaction container and passes it over to the scoreboard via the `mon2scb` mailbox.
+
+#### D. Scoreboard (scb)
+* **Role:** The verification validation engine.
+* **Functionality:** Features a `forever` loop that pulls actual transactions from the monitor. For normal tests, it cross-checks them against the reference data provided by the generator via the `gen2scb` mailbox. For structural errors like `FIFO_UNDERFLOW` (where the generator remains silent), it bypasses the empty reference queue entirely to directly assess that the hardware output successfully forced its safety-masked default `8'h00` signature. It tracks strict pass/fail totals, flushes its state counters between back-to-back tests, and logs the final verification summaries.
+
 
 ## V. Verification and Simulation
 | Test # | Scenario                  | Intent / Description                                                                                                      | Evaluation Target |
