@@ -43,9 +43,8 @@ The accompanying verification environment is built from the ground up using an *
 The UART hardware core is written in synthesizable Verilog and uses an asynchronous, decoupled microarchitecture. It consists of three primary custom design blocks:
 
 #### UART Design Under Test
-<img width="508" height="429" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/UART_ARCHITECTURE.png" />
+<img width="700" height="500" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/UART_ARCHITECTURE.png" />
 
-#### TestBench Environment Top Block 
 
 #### A. Baud Rate Generator
 * **Role:** Operates as a precise clock-divider module.
@@ -66,6 +65,8 @@ The UART hardware core is written in synthesizable Verilog and uses an asynchron
 
 ### 2. Verification Environment Blocks
 The Verification IP framework is engineered using an Object-Oriented Programming (OOP) class structure in SystemVerilog. It abstracts signal toggling into separate tasks to verify the hardware without deadlocks.
+
+#### TestBench Environment Top Block 
 
 #### A. Generator (gen)
 * **Role:** The test scenario strategist.
