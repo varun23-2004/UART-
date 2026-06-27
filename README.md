@@ -32,7 +32,7 @@ The accompanying verification environment is built from the ground up using an *
 ### Verification IP Framework Features
 * **Modular OOP Architecture:** Clean segregation of verification tasks into distinct structural classes including a targeted Generator, a pin-driving Driver, an independent wire-sniffing Monitor, and a processing Scoreboard.
 * **Targeted Regression Suite:** A deterministic test array running 8 precise, specialized verification sequences—ranging from standard `HAPPY_PATH` and data patterns (`WALKING_ONES`) to zero-delay throughput bursts (`IMMEDIATE_START_BURST`).
-* **Deterministic Timing Hardening:** Rigid timeline synchronization utilizing explicit time units (`#20000ns;`) within the driver loop, ensuring predictable inter-packet line delays regardless of varying simulator tool default precisions (ps vs. ns).
+* **Deterministic Timing Hardening:** Rigid timeline synchronization utilizing explicit time units (`#5000ns;`) within the driver loop, ensuring predictable inter-packet line delays regardless of varying simulator tool default precisions (ps vs. ns).
 * **Self-Purging Metric Gating:** Dynamic mailbox and internal tracking resets executed between sequential tests, preventing residual data pollution and enabling true automated regression sign-off.
 
 ## IV. System Architecture
