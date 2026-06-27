@@ -85,6 +85,7 @@ The Verification IP framework is engineered using an Object-Oriented Programming
 
 
 ## V. Verification and Simulation
+The test suite consists of **8 comprehensive regression scenarios** verified sequentially
 | Test # | Scenario                  | Intent / Description                                                                                                      | Evaluation Target |
 | :----: | ------------------------- | ------------------------------------------------------------------------------------------------------------------------- | :---------------: |
 |    1   | **HAPPY_PATH**            | Baseline functional verification of legal transmit and receive operations under standard operating conditions.            |         10        |
