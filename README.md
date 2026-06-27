@@ -1,43 +1,39 @@
-# Full-Cycle RTL Design and SystemVerilog Verification of a Buffered UART Core
+# UART Core: RTL Design & Verification IP Framework
 
-A complete, production-grade silicon macro development project featuring a fully synthesized Universal Asynchronous Receiver-Transmitter (UART) core integrated with dual internal FIFO buffers, alongside a robust, object-oriented SystemVerilog constrained-random verification environment. This project demonstrates a comprehensive execution of the entire digital ASIC design cycle—from structural RTL microarchitecture to advanced boundary verification.
+A comprehensive, production-grade silicon IP package featuring a custom-designed Universal Asynchronous Receiver-Transmitter (UART) hardware core integrated with a modular, Object-Oriented SystemVerilog verification suite. This repository demonstrates end-to-end ASIC/SoC frontend engineering development—spanning hardware microarchitecture design, FIFO buffer implementation, structural testbench development, and a targeted multi-scenario regression flow.
 
 ---
 
 ## I. Overview
-This repository contains a full-cycle, hardware-validated **UART Core** and its accompanying layered **Verification Intellectual Property (VIP)** environment. 
+This project represents a complete, self-contained silicon IP development cycle encompassing both the **RTL Design** and **Functional Verification** of an asynchronous serial communication (UART) macro. 
 
-The hardware architecture partitions the UART protocol into independent, synchronized transmit (`TX_TOP`) and receive (`RX_TOP`) pipelines, each backed by a dedicated synchronous FIFO memory buffer to prevent system data loss. The verification environment utilizes an Object-Oriented Programming (OOP) framework in SystemVerilog, deploying modular components (Generator, Driver, Monitor, and Scoreboard) connected via virtual interfaces. 
+The hardware architecture features independent Transmit (TX) and Receive (RX) pipelines, dedicated internal buffering via synchronous FIFO memories, and an configurable integer clock divider for high-accuracy baud rate generation. 
 
-By taking this macro from RTL microarchitecture down to comprehensive multi-scenario regression sign-off, the project ensures perfect synchronization, reliable clock-domain division, and absolute protocol compliance.
+The accompanying verification environment is built from the ground up using an **Object-Oriented SystemVerilog** architecture. By decoupling execution handshakes (Driver/Monitor) from evaluation checkers (Scoreboard), the testbench provides an automated, self-clearing verification loop that executes a suite of targeted boundary and protocol stress scenarios without requiring manual waveform debugging.
 
 ---
 
 ## II. Project Objectives
-
-### RTL Design Objectives
-* **Modular Microarchitectural Design:** Implement a clean, synthesizable Verilog core dividing the UART protocol into a programmable Baud Generator, an independent TX Serializer state machine, and an RX Deserializer state machine.
-* **Elastic Buffer Integration:** Incorporate dual-port internal FIFO architectures (`TX_FIFO` and `RX_FIFO`) to decouple the fast master processor clock domain (`UCLK`) from the slow, physical bit-rate clock (`BCLK`).
-* **Robust Hardware Error Masking:** Design internal safety-gating logic to handle protocol anomalies—such as illegal read requests—without corrupting the core's Finite State Machines (FSMs).
-
-### Functional Verification Objectives
-* **Layered Testbench Architecture:** Build an expandable, reusable verification environment utilizing mailboxes, custom transaction classes, and virtual hardware interfaces to cleanly decouple generation intent from physical wire handshakes.
-* **Corner-Case Stress Testing:** Verify absolute boundary stability under extreme environmental conditions, including full FIFO queue saturation (overflow stress) and zero-packet read requests (underflow masking).
-* **Automated Regression Management:** Deploy a self-clearing verification engine capable of executing distinct stimulus profiles sequentially, dynamically flushing scoreboard and driver metrics between iterations to prevent cross-test residue contamination.
+* **End-to-End Core Synthesis Preparation:** Architect a clean, synthesizable Verilog RTL description of a UART macro containing fully decoupled, independent TX/RX engines.
+* **Deterministic Boundary Validation:** Formulate targeted functional testing sequences to validate hardware behavior at physical boundary conditions, specifically ensuring robust data handling during buffer saturation (FIFO Overflow) and illegal access attempts (FIFO Underflow).
+* **Protocol & Phase Compliance:** Enforce strict adherence to standard UART framing constraints (Start, Data, and Stop bit sequencing) and verify reliable Receiver FSM wake-up characteristics following microsecond-scale line inactivity.
+* **Automated Regression Management:** Implement a self-contained testbench stepping engine capable of purging transaction mailboxes, initializing hardware resets, and cycling through distinct test scenarios seamlessly in a single compilation sweep.
 
 ---
 
-## III. Key Features
+## III. Project Features
 
-### Hardware Architecture (Design)
-* **Divided Clock Domain Synchronization:** A dedicated internal Baud Generator maps the system clock (`UCLK`) down to a precise sampling rate (`BCLK`) to ensure perfect alignment with industry-standard baud targets.
-* **Buffered Core Data Alignment:** Depth-16 synchronous FIFO integration guarantees data payload retention, eliminating data loss during back-to-back hardware bursts.
-* **Loopback Capable Physical Layer:** Fully self-contained single-wire serial transmission (`tx_rx`) designed for effortless diagnostic loopback and real-world system-level integration.
+### RTL Hardware Design Features
+* **Decoupled Tx/Rx Topologies:** Independent `TX_TOP` and `RX_TOP` hardware blocks allowing full-duplex, simultaneous data transmission and reception without cross-domain interference.
+* **Synchronous FIFO Memory Buffering:** Integrated high-speed FIFO queues utilizing master system clock (`UCLK`) synchronization to buffer data streams and prevent data dropping during CPU handshake delays.
+* **Hardware-Level Underflow Protection:** Built-in output safety masking that automatically forces the parallel data bus (`R_data`) to a clean `8'h00` state if an illegal read strobe is asserted while the receive queue is completely empty.
+* **Integrated Baud Generator Engine:** A dedicated clock division macro that translates the high-frequency master system clock (`UCLK`) into highly precise internal baud ticks (`BCLK`) to govern serial shift registers.
 
-### Verification Framework (Validation)
-* **Constrained-Random Stimulus Execution:** Advanced pattern sequences (including structural `WALKING_ONES` and maximum-bound `SINGLE_BIT_SET` injections) ensure deep structural coverage and eliminate stuck-at wire faults.
-* **Hardened Timeline Logging:** Explicit time-unit casting (`#20000ns`) locks the driver's inter-packet line-idle delays securely in place, guaranteeing predictable, repeatable simulation timelines across all EDA tool precisions.
-* **Intelligent Scoreboard Checking:** An automated dual-mailbox verification engine that handles both transactional expected-data matching and isolated hardware flag checks dynamically.
+### Verification IP Framework Features
+* **Modular OOP Architecture:** Clean segregation of verification tasks into distinct structural classes including a targeted Generator, a pin-driving Driver, an independent wire-sniffing Monitor, and a processing Scoreboard.
+* **Targeted Regression Suite:** A deterministic test array running 8 precise, specialized verification sequences—ranging from standard `HAPPY_PATH` and data patterns (`WALKING_ONES`) to zero-delay throughput bursts (`IMMEDIATE_START_BURST`).
+* **Deterministic Timing Hardening:** Rigid timeline synchronization utilizing explicit time units (`#20000ns;`) within the driver loop, ensuring predictable inter-packet line delays regardless of varying simulator tool default precisions (ps vs. ns).
+* **Self-Purging Metric Gating:** Dynamic mailbox and internal tracking resets executed between sequential tests, preventing residual data pollution and enabling true automated regression sign-off.
 
 ## IV. System Architecture
 
