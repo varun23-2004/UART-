@@ -43,4 +43,14 @@ The accompanying verification environment is built from the ground up using an *
 ![UART Verification VIP Architecture](uart_architecture.png)
 
 ## V. Verification and Simulation
-The test suite consists of 8 comprehensive regression scenarios verified sequentially:Test #ScenarioIntent / DescriptionEvaluation Target1HAPPY_PATHBaseline legal write and read cycles under standard conditions.102FIFO_OVERFLOWStream 20 bytes into a Depth-16 FIFO to test hardware saturation boundaries.163FIFO_UNDERFLOWInject artificial read request onto empty FIFO; verifies safety masking to 8'h00.24WALKING_ONESShift a active '1' bit through all 8 data bus positions to ensure no stuck-at pin faults.85SINGLE_BIT_SETBoundary pattern testing focusing exclusively on absolute maximum/minimum bounds (8'h01, 8'h80).26CONSECUTIVE_BYTESRapid back-to-back sequential processing of constant values to monitor FSM reset timing.67IMMEDIATE_START_BURSTZero-latency burst streaming to maximize data throughput and catch clock domain race conditions.58LONG_IDLE_TESTInject a massive 20,000ns inter-packet silence window to confirm receiver wake-up reliability.
+| Test # | Scenario                  | Intent / Description                                                                                                      | Evaluation Target |
+| :----: | ------------------------- | ------------------------------------------------------------------------------------------------------------------------- | :---------------: |
+|    1   | **HAPPY_PATH**            | Baseline functional verification of legal transmit and receive operations under standard operating conditions.            |         10        |
+|    2   | **FIFO_OVERFLOW**         | Stream 20 bytes into a Depth-16 FIFO to verify overflow handling and hardware saturation behavior.                        |         16        |
+|    3   | **FIFO_UNDERFLOW**        | Force a read request on an empty FIFO to verify safe underflow handling and default output (`8'h00`).                     |         2         |
+|    4   | **WALKING_ONES**          | Shift a single active `1` through all 8 data bus positions to detect stuck-at faults on each data line.                   |         8         |
+|    5   | **SINGLE_BIT_SET**        | Verify boundary data patterns by transmitting only the minimum and maximum single-bit values (`8'h01` and `8'h80`).       |         2         |
+|    6   | **CONSECUTIVE_BYTES**     | Continuously transmit back-to-back data bytes to verify FSM recovery, buffering, and sequential processing.               |         6         |
+|    7   | **IMMEDIATE_START_BURST** | Initiate zero-latency burst transmission to maximize throughput and expose clock-domain or timing race conditions.        |         5         |
+|    8   | **LONG_IDLE_TEST**        | Insert a 20,000 ns idle period between packets to verify receiver wake-up and synchronization after prolonged inactivity. |         1         |
+
