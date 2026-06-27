@@ -37,8 +37,11 @@ The accompanying verification environment is built from the ground up using an *
 
 ## IV. System Architecture
 
-The testbench structure communicates via transaction mailboxes over a virtual hardware interface:
-  
+### 1. UART Design Under Test (DUT) Internals
+
+### 2. Testbench Environment Top Block
+![UART Verification VIP Architecture](uart_architecture.png)
+
 # 3 System Design
 ## 3.1 Block Diagram 
 The system consists of modular blocks integrated to form a complete UART communication interface. The high-level architecture includes:
