@@ -42,6 +42,11 @@ The accompanying verification environment is built from the ground up using an *
 ### 1. RTL Hardware Design Blocks
 The UART hardware core is written in synthesizable Verilog and uses an asynchronous, decoupled microarchitecture. It consists of three primary custom design blocks:
 
+#### UART Design Under Test
+<img width="508" height="429" alt="uart_hardware_block_diagram"
+
+#### TestBench Environment Top Block 
+
 #### A. Baud Rate Generator
 * **Role:** Operates as a precise clock-divider module.
 * **Functionality:** It samples the high-frequency master system clock (`UCLK`) and down-divides it to create a lower-frequency baud tick (`BCLK`). This clock pulse matches standard data transmission frequencies (e.g., 9600, 115200 baud) and determines the exact rate at which bits are shifted onto or sampled from the physical wire.
@@ -55,6 +60,8 @@ The UART hardware core is written in synthesizable Verilog and uses an asynchron
 * **RX_FIFO:** A synchronous FIFO queue that temporarily accumulates incoming parallel bytes. It provides the `rx_empty` flag to alert external master blocks that data is available. 
 * **Underflow Masking Logic:** Built directly into the FIFO reading data path. If an illegal read strobe (`rd_uart`) is forced while `rx_empty` is active, this hardware safety hook instantly drives the parallel output data lines to `8'h00` to prevent uninitialized memory junk from escaping into the system.
 
+  
+
 ---
 
 ### 2. Verification Environment Blocks
@@ -66,7 +73,7 @@ The Verification IP framework is engineered using an Object-Oriented Programming
 
 #### B. Driver (drv)
 * **Role:** The testbench pin-level actuator.
-* **Functionality:** Unpacks transaction objects from the `gen2drv` mailbox and drives the virtual physical pins (`W_data`, `wr_uart`, `rd_uart`) in perfect synchronization with the master clock domain (`UCLK`). It includes custom processing exceptions, such as zero-delay burst streaming blocks and dedicated inter-packet timeline delay logic (`#20000ns;`) to properly isolate the physical `tx_rx` wire into true line-idle states.
+* **Functionality:** Unpacks transaction objects from the `gen2drv` mailbox and drives the virtual physical pins (`W_data`, `wr_uart`, `rd_uart`) in perfect synchronization with the master clock domain (`UCLK`). It includes custom processing exceptions, such as zero-delay burst streaming blocks and dedicated inter-packet timeline delay logic (`#5000ns;`) to properly isolate the physical `tx_rx` wire into true line-idle states.
 
 #### C. Monitor (mon)
 * **Role:** The objective wire observer.
