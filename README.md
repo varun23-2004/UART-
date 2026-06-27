@@ -59,7 +59,8 @@ The UART hardware core is written in synthesizable Verilog and uses an asynchron
 * **RX_FIFO:** A synchronous FIFO queue that temporarily accumulates incoming parallel bytes. It provides the `rx_empty` flag to alert external master blocks that data is available. 
 * **Underflow Masking Logic:** Built directly into the FIFO reading data path. If an illegal read strobe (`rd_uart`) is forced while `rx_empty` is active, this hardware safety hook instantly drives the parallel output data lines to `8'h00` to prevent uninitialized memory junk from escaping into the system.
 
-  
+#### UART Verification Environment Block Diagram
+<img width="1000" height="800" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/UART_VERIFICATION_ARCHITECTURE.png" />
 
 ---
 
