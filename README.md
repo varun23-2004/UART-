@@ -1,16 +1,33 @@
+# UART Verification IP Framework
 
-# 1. UART:
-UART is one of the most widely used serial communication protocols in embedded systems and digital design. It facilitates async communication between devices using two lines: Trasmitter (TX) and Receiver (RX). Unlike sync protocols UART dose'nt require shared clock between sender and receiver making it ideal for low-speed, short distance data exchange.
+A comprehensive, robust SystemVerilog-based Verification Intellectual Property (VIP) environment designed to thoroughly stress-test an asynchronous serial communication (UART) core. This testbench executes a layered architecture to validate transaction integrity, FIFO edge-cases, error-masking protocols, and physical line-idle states.
 
-## 1.1. Project Objectives:
-The objective of this project is to design a complete UART module in Verilog,
-consisting of Transmitter and Receiver units, FIFO buffers for data handling and a baud rate generator for controlling data transmission speed. The design aims to be synthesizable, parameterrized and ready for FPGA implementation. 
+---
+
+## I. Overview
+This project contains a complete, layered constrained-random testbench framework authored in **SystemVerilog**. The environment is structured to verify a Universal Asynchronous Receiver-Transmitter (UART) core with built-in FIFO memory depth buffers. The verification architecture separates intent (Generation) from execution (Driver/Monitor Handshakes) and checking (Scoreboard), ensuring modularity and reusable component IPs.
+
+---
 
 ## II. Project Objectives
 * **Functional Verification:** Validate error-free parallel-to-serial and serial-to-parallel data transitions across standard operating conditions.
 * **Boundary Stress Validation:** Prove robust design handling under intense data streaming conditions (FIFO overflow) and illegal read conditions (FIFO underflow).
 * **Protocol Compliance:** Confirm strict adherence to the UART framing specification, including precise start/stop bit transitions and extended period bus-settling times.
 * **Clean Automation:** Implement a structured regression manager capable of flushing state metrics and switching stimulus profiles dynamically without hanging the simulator.
+
+---
+
+## III. Key Features
+* **Layered Verification Environment:** Cleanly split into Object-Oriented Programming (OOP) testbench components: Generator, Driver, Monitor, Interface, and Scoreboard.
+* **Advanced Constraint Scenarios:** Supports targeted test patterns including `WALKING_ONES`, single-bit toggles, and back-to-back zero-latency transaction bursts.
+* **Self-Clearing Metric Pipeline:** Dynamic scoreboard and driver flushing mechanisms to allow consecutive standalone regression checks to execute seamlessly.
+* **Precise Physical Simulation Time Tracking:** Hardened delay casting (`#20000ns`) ensuring stable simulation timelines across varied EDA tool default precisions.
+
+---
+
+## IV. System Architecture
+
+The testbench structure communicates via transaction mailboxes over a virtual hardware interface:
   
 # 3 System Design
 ## 3.1 Block Diagram 
