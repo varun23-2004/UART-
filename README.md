@@ -43,7 +43,7 @@ The accompanying verification environment is built from the ground up using an *
 The UART hardware core is written in synthesizable Verilog and uses an asynchronous, decoupled microarchitecture. It consists of three primary custom design blocks:
 
 #### UART Design Under Test
-<img width="508" height="429" alt="uart_hardware_block_diagram"
+<img width="508" height="429" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/UART_ARCHITECTURE.png" />
 
 #### TestBench Environment Top Block 
 
