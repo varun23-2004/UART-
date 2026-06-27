@@ -42,20 +42,5 @@ The accompanying verification environment is built from the ground up using an *
 ### 2. Testbench Environment Top Block
 ![UART Verification VIP Architecture](uart_architecture.png)
 
-# 3 System Design
-## 3.1 Block Diagram 
-The system consists of modular blocks integrated to form a complete UART communication interface. The high-level architecture includes:
-1) UART Transmitter
-2) UART Receiver
-3) Baud Rate Generator
-4) FIFO Buffers
-5) Top-level Integration module
-## 3.2 Design Parameters 
-The UART module is desgined with several configurable parameters to enhance reuseablity and adaptability across various system requirements. The main parameters are as follows:
-1) BAUD_RATE= 921600: Defines the baud rate used for data transmission and reception.
-2) OVERSAMPLE = 16: Sets the oversampling rate for the receiver to improve sampling accuracy.
-3) CLK_FREQ= 100*(10^6): Specifies the system frequency, set to 100 MHz.
-4) Final_value=((CLK_FREQ)/(BAUD_RATE*OVERSAMPLE))+0.5: This value represents the divider used to generate the baud rate clock. The addition of 0.5 ensures rounding of the nearest integer.
-5) FIFO_WIDTH=8: Sets the width of each data word in the FIFO buffers.
-6) FIFO_DEPTH=16: Determines the number of entries in both TX AND RX FIFOs.
-7) max_fifo_addr=$clog2(FIFO_DEPTH): Automatically calculates the address qidth needed to index the FIFO.
+## V. Verification and Simulation
+The test suite consists of 8 comprehensive regression scenarios verified sequentially:Test #ScenarioIntent / DescriptionEvaluation Target1HAPPY_PATHBaseline legal write and read cycles under standard conditions.102FIFO_OVERFLOWStream 20 bytes into a Depth-16 FIFO to test hardware saturation boundaries.163FIFO_UNDERFLOWInject artificial read request onto empty FIFO; verifies safety masking to 8'h00.24WALKING_ONESShift a active '1' bit through all 8 data bus positions to ensure no stuck-at pin faults.85SINGLE_BIT_SETBoundary pattern testing focusing exclusively on absolute maximum/minimum bounds (8'h01, 8'h80).26CONSECUTIVE_BYTESRapid back-to-back sequential processing of constant values to monitor FSM reset timing.67IMMEDIATE_START_BURSTZero-latency burst streaming to maximize data throughput and catch clock domain race conditions.58LONG_IDLE_TESTInject a massive 20,000ns inter-packet silence window to confirm receiver wake-up reliability.
