@@ -43,7 +43,7 @@ The accompanying verification environment is built from the ground up using an *
 The UART hardware core is written in synthesizable Verilog and uses an asynchronous, decoupled microarchitecture. It consists of three primary custom design blocks:
 
 #### UART Design Under Test
-<img width="1000" height="800" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/UART_ARCHITECTURE.png" />
+<img width="1000" height="800" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/architecture/UART_ARCHITECTURE.png" />
 
 
 #### A. Baud Rate Generator
@@ -60,7 +60,7 @@ The UART hardware core is written in synthesizable Verilog and uses an asynchron
 * **Underflow Masking Logic:** Built directly into the FIFO reading data path. If an illegal read strobe (`rd_uart`) is forced while `rx_empty` is active, this hardware safety hook instantly drives the parallel output data lines to `8'h00` to prevent uninitialized memory junk from escaping into the system.
 
 #### UART Verification Environment Block Diagram
-<img width="800" height="600" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/UART_VERIFICATION_ARCHITECTURE.png" />
+<img width="800" height="600" alt="uart_hardware_block_diagram" src="https://github.com/varun23-2004/UART-/blob/main/Images/architecture/UART_VERIFICATION_ARCHITECTURE.png" />
 
 ---
 
