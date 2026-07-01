@@ -13,13 +13,11 @@ wire tx_done_tk;
 wire [DATA_WIDTH-1:0] tx_din;
 wire empty;
 
-TX tx_blk(
-    .BCLK(UCLK),
+TX tx_blk(.BCLK(UCLK),
     .reset(reset),
     .tx_din(tx_din),
     .tx_start(!empty),
     .tx_done_tk(tx_done_tk),
-    .tx(tx)
-);
-	FIFO tx_fifo (UCLK,reset,wr_uart,tx_done_tk,W_data,tx_din,tx_full,empty,overflow,underflow);
+    .tx(tx));
+FIFO tx_fifo (UCLK,reset,wr_uart,tx_done_tk,W_data,tx_din,tx_full,empty,overflow,underflow);
 endmodule

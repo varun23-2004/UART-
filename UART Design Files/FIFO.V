@@ -23,9 +23,7 @@ reg [max_fifo_addr-1:0] rd_ptr;
 reg [max_fifo_addr:0]   count;
 
 
-//=====================================================
 // WRITE LOGIC
-//=====================================================
 always @(posedge clk or posedge reset)
 begin
     if(reset)
@@ -39,10 +37,7 @@ begin
     end
 end
 
-
-//=====================================================
 // READ LOGIC
-//=====================================================
 always @(posedge clk or posedge reset)
 begin
     if(reset)
@@ -66,28 +61,23 @@ always @(*) begin
     data_out=FIFO_mem[rd_ptr];//New valid data;
 end
 
-//=====================================================
 // FIFO OCCUPANCY COUNT
-//=====================================================
 always @(posedge clk or posedge reset)
 begin
     if(reset)
     begin
         count <= 0;
     end
-
     // write only
     else if(wr_en && !full && !(rd_en && !empty))
     begin
         count <= count + 4'd1;
     end
-
     // read only
     else if(rd_en && !empty && !(wr_en && !full))
     begin
         count <= count - 4'd1;
     end
-
     // simultaneous read/write or idle
     else
     begin
@@ -95,10 +85,7 @@ begin
     end
 end
 
-
-//=====================================================
 // OVERFLOW / UNDERFLOW FLAGS
-//=====================================================
 always @(posedge clk or posedge reset)
 begin
     if(reset)
@@ -115,9 +102,6 @@ begin
             underflow <= 1'b1;
     end
 end
-
-
 assign full  = (count == FIFO_DEPTH);
 assign empty = (count == 0);
-
 endmodule

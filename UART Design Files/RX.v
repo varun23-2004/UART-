@@ -11,20 +11,19 @@ input rx_write;
 output reg [DATA_WIDTH-1:0] rx_dout;
 output reg rx_done_tk;
 
-reg [1:0] 			 current_state,next_state;
+reg [1:0] current_state,next_state;
 reg [DATA_WIDTH-1:0] shift_reg, shift_reg_value;
-reg [3:0] 			 tk_counter;
-reg 				 tk_counter_reset;
-reg [DATA_BITS-1:0]  data_bits_counter, data_bits_counter_value;
+reg [3:0] tk_counter;
+reg tk_counter_reset;
+reg [DATA_BITS-1:0] data_bits_counter, data_bits_counter_value;
 
-localparam IDLE  = 2'b00; 
+localparam IDLE = 2'b00; 
 localparam START = 2'b01; 
-localparam DATA  = 2'b10; 
-localparam STOP  = 2'b11;
+localparam DATA = 2'b10; 
+localparam STOP = 2'b11;
 
 //SEQUENTIAL BLOCK
-always @(posedge BCLK or posedge reset) 
-begin
+always @(posedge BCLK or posedge reset) begin
 	if(reset) 
 	begin
 		current_state <=IDLE;
@@ -47,13 +46,10 @@ begin
 		end
 	end
 end
-always @(*)
-begin
+always @(*)begin
 	next_state = current_state;
 	shift_reg_value = shift_reg;
-	
 	case (current_state)
-		
 		IDLE: 
 		begin
 			if(rx==0)
@@ -70,7 +66,6 @@ begin
 			rx_done_tk=0;
 			rx_dout=0;
 		end
-		
 		START:
 		begin
 			rx_done_tk=0;
@@ -87,7 +82,6 @@ begin
 				next_state=START;
 			end
 		end
-		
 		DATA:
 		begin
 			rx_done_tk=0;
@@ -113,7 +107,6 @@ begin
 				shift_reg_value=shift_reg;
 			end
 		end
-		
 		STOP:
 		begin
 			tk_counter_reset=0;

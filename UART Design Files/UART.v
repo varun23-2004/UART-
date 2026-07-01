@@ -17,20 +17,17 @@ wire baud_tick;
 
 baud_gen baud_generator(UCLK,reset,baud_tick);
 
-TX_TOP tx_top_blk(
-    .UCLK(UCLK),
+TX_TOP tx_top_blk(.UCLK(UCLK),
     .reset(reset),
     .W_data(W_data),
     .wr_uart(wr_uart),
     .tx(tx_rx),
-    .tx_full(tx_full)
-);
-RX_TOP rx_top_blk(
-    .UCLK(UCLK),
+    .tx_full(tx_full));
+    
+RX_TOP rx_top_blk(.UCLK(UCLK),
     .reset(reset),
     .rd_uart(rd_uart),
     .rx(tx_rx),
     .R_data(R_data),
-    .rx_empty(rx_empty)
-);
+    .rx_empty(rx_empty));
 endmodule                           

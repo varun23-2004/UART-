@@ -24,12 +24,10 @@ class environment;
 
     //5. Build Task
     task build();
-
         // Create Mailboxes
         gen2drv = new();
         gen2scb = new();
         mon2scb = new();
-
         // Create Components
         gen = new(gen2drv, gen2scb);
         drv = new(gen2drv,vif);
@@ -42,7 +40,6 @@ class environment;
 
     // Run Task
     // Upgraded Run Task inside environment.sv
-    
     task run_regression();
         test_type_e regression_list[8] = '{
             HAPPY_PATH, 
@@ -54,7 +51,6 @@ class environment;
             IMMEDIATE_START_BURST,
             LONG_IDLE_TEST
         };
-
         int expected_counts[8] = '{10, 16, 2, 8, 2, 6, 5, 3};
 
         for (int i = 0; i < 8; i++) begin
@@ -74,12 +70,12 @@ class environment;
             scb.test_to_run = current_test;
             scb.reset_scoreboard();
 
-            // 3. Launch elements concurrently in the background
+            // 3. Launch elements in the background
             fork
                 gen.start();
                 drv.start(); // No inputs! Self-managing loop
-                mon.start(); // Classic forever loop
-                scb.start(); // Classic forever loop
+                mon.start(); 
+                scb.start(); 
             join_none
 
             // 4. Wait until the scoreboard confirms it received all the test answers

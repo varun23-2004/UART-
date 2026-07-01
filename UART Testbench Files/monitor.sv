@@ -22,10 +22,8 @@ class monitor;
     task start();
     forever begin
         @(posedge vif.UCLK);
-
         if(vif.rd_uart)
         begin
-
             tr = new();
             tr.data = vif.R_data;
             tr.display("MON");

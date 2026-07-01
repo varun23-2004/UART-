@@ -16,13 +16,11 @@ wire full;
 wire underflow;
 wire overflow;
 
-RX rx_blk(
-    .BCLK(UCLK),
+RX rx_blk(.BCLK(UCLK),
     .reset(reset),
     .rx_dout(rx_dout),
     .rx_write(full),
     .rx_done_tk(rx_done_tk),
-    .rx(rx)
-);
+    .rx(rx));
 FIFO rx_fifo (UCLK,reset,rx_done_tk,rd_uart,rx_dout,R_data,full,rx_empty,overflow,underflow);
 endmodule

@@ -5,15 +5,14 @@ class scoreboard;
     uart_transaction exp_tr;
     uart_transaction act_tr;
 
-
     //2. mailbox handle 
     mailbox #(uart_transaction) gen2scb;
     mailbox #(uart_transaction) mon2scb;
      
     int pass_count = 0;
     int fail_count = 0;
-    int total_count=0;
-    int test_done =0;
+    int total_count = 0;
+    int test_done = 0;
 
     // Test control veriable (passed from environment)
     test_type_e test_to_run = HAPPY_PATH;
@@ -28,11 +27,10 @@ class scoreboard;
 
     // Add this inside your scoreboard class
     task reset_scoreboard();
-        pass_count  = 0;
-        fail_count  = 0;
+        pass_count = 0;
+        fail_count = 0;
         total_count = 0;
-        test_done   = 0;
-
+        test_done = 0;
         // Purge mailboxes if anything is left over
         while(gen2scb.num() > 0) begin: purge_gen gen2scb.get(exp_tr); end
         while(mon2scb.num() > 0) begin: purge_mon mon2scb.get(act_tr); end
@@ -76,13 +74,13 @@ class scoreboard;
         end
 
         case (test_to_run)
-                    HAPPY_PATH:            if (total_count == 10) test_done = 1;
-                    FIFO_OVERFLOW:         if (total_count == 16) test_done = 1;
-                    WALKING_ONES:          if (total_count == 8)  test_done = 1;
-                    SINGLE_BIT_SET:        if (total_count == 2)  test_done = 1;
-                    CONSECUTIVE_BYTES:     if (total_count == 6)  test_done = 1;
+                    HAPPY_PATH: if (total_count == 10) test_done = 1;
+                    FIFO_OVERFLOW: if (total_count == 16) test_done = 1;
+                    WALKING_ONES: if (total_count == 8)  test_done = 1;
+                    SINGLE_BIT_SET: if (total_count == 2)  test_done = 1;
+                    CONSECUTIVE_BYTES: if (total_count == 6)  test_done = 1;
                     IMMEDIATE_START_BURST: if (total_count == 5)  test_done = 1;
-                    LONG_IDLE_TEST:        if (total_count == 3)  test_done = 1;
+                    LONG_IDLE_TEST: if (total_count == 3)  test_done = 1;
                 endcase
                 
                 //if (test_done) begin
@@ -90,10 +88,9 @@ class scoreboard;
                 //end
         end
    end
-    
    endtask: start
 
-        task print_summary(bit terminate_sim);
+    task print_summary(bit terminate_sim);
         $display("\n---------------------------------------------------------------------");
         $display("                         FINAL VERIFICATION REPORT                     ");
         $display("-----------------------------------------------------------------------");
@@ -107,5 +104,5 @@ class scoreboard;
             $display("FAILED:       [VERIFICATION FAILED]");
         end 
         $display("------------------------------------------------------------------------");
-        endtask                
+    endtask                
 endclass

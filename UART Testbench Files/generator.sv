@@ -38,7 +38,8 @@ class generator;
     //NORMAL WRITE AND READ TEST
     task run_happy_path();
         $display("[GEN] Starting HAPPY_PATH Test Sequence");
-        for(int i=0; i<no_of_trans; i++) begin
+        for(int i=0; i<no_of_trans; i++) 
+        begin
             gen_trans = new();
             gen_trans.data = i[7:0]; 
             gen2drv.put(gen_trans); 

@@ -16,7 +16,7 @@ class driver;
     //4. Consturctor
     function new(mailbox #(uart_transaction) gen2drv,virtual uart_if vif);
         this.gen2drv = gen2drv;
-        this.vif     = vif;
+        this.vif = vif;
     endfunction: new
 
     // 5. Write Task
@@ -24,10 +24,8 @@ class driver;
         vif.W_data <= tr.data;
         @(posedge vif.UCLK);
         vif.wr_uart <= 1'b1;
-
         @(posedge vif.UCLK);
         vif.wr_uart <=1'b0;
-
         $display("[DRV] Written Data = %0h at %t" , tr.data, $time);
     endtask
 
@@ -63,17 +61,16 @@ class driver;
             // 1. Wait for the generator to dump packets into the mailbox
             wait(gen2drv.num() > 0);
             $display("[DRV] Detected %0d transactions in mailbox. Starting execution loop.", gen2drv.num());
-
             // 2. Process EVERY SINGLE packet currently waiting in the pipeline
             while (gen2drv.num() > 0) begin
                 
-                // SPECIAL EXCEPTION: FIFO UNDERFLOW
+                //FIFO UNDERFLOW
                 if (test_to_run == FIFO_UNDERFLOW) begin
                     gen2drv.get(tr);
                     read_uart();
                 end
-                
-                // SPECIAL EXCEPTION: IMMEDIATE START BURST
+                 
+                //IMMEDIATE START BURST
                 else if (test_to_run == IMMEDIATE_START_BURST) begin
                     $display("[DRV-BURST] Rapidly streaming remaining %0d burst packets...", gen2drv.num());
                     
@@ -92,7 +89,7 @@ class driver;
                     end
                 end
                 
-                // STANDARD SCENARIOS (Happy Path, Overflow, Walking Ones, Patterns, Long Idle)
+                // LONG IDLE
                 else begin
                     gen2drv.get(tr);
                     if (test_to_run == LONG_IDLE_TEST) begin

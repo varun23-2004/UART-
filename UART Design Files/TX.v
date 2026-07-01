@@ -11,20 +11,19 @@ input [DATA_WIDTH-1:0] tx_din;
 output reg tx_done_tk;
 output reg tx;
 
-reg [1:0] 			 current_state,next_state;
+reg [1:0] current_state,next_state;
 reg [DATA_WIDTH-1:0] shift_reg, shift_reg_value;
-reg [3:0] 			 tk_counter; 
-reg 				 tk_counter_reset;
+reg [3:0] tk_counter; 
+reg tk_counter_reset;
 reg [DATA_BITS-1:0] data_bits_counter, data_bits_counter_value;
 
-localparam IDLE	 = 2'b00;
+localparam IDLE = 2'b00;
 localparam START = 2'b01;
-localparam DATA  = 2'b10;
-localparam STOP  = 2'b11;
+localparam DATA = 2'b10;
+localparam STOP = 2'b11;
 
 //SEQUENTIAL BLOCK
-always @(posedge BCLK or posedge reset)
-begin
+always @(posedge BCLK or posedge reset)begin
 	if(reset)
 	begin
 		current_state <=IDLE;
@@ -48,15 +47,14 @@ begin
 	end
 end
 
-always @(*)
-begin 
+always @(*)begin 
 	next_state = current_state;
 	shift_reg_value = shift_reg;
 	tk_counter_reset = 0;
 	data_bits_counter_value =0;
 	tx_done_tk = 0;
 	tx = 1'b1;
-	
+
 	case (current_state)
 	IDLE:
 	begin
@@ -75,7 +73,6 @@ begin
 		data_bits_counter_value=0;
 		tx=1'b1;
 	end
-	
 	START:
 	begin
 		tx=1'b0;
@@ -93,7 +90,6 @@ begin
 			next_state=START;
 		end
 	end
-	
 	DATA:
 	begin
 		tx=shift_reg[0];
@@ -119,7 +115,6 @@ begin
 			shift_reg_value=shift_reg;
 		end
 	end
-	
 	STOP:
 	begin 
 		tx=1'b1;
@@ -138,7 +133,6 @@ begin
 			next_state=STOP;
 		end
 	end
-
 	default:
 	begin
 		tx=1'b0;

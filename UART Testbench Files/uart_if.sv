@@ -4,7 +4,6 @@ interface uart_if;
     logic reset;
 
     logic [7:0] W_data;
-
     logic [7:0] R_data;
 
     logic tx_full;
@@ -13,9 +12,7 @@ interface uart_if;
     logic wr_uart;
     logic rd_uart;
 
-////////////////
 //DRIVER MODPORT
-////////////////
     modport DRIVER (
         input UCLK,
         input tx_full,
@@ -27,9 +24,7 @@ interface uart_if;
         output rd_uart
     );
 
-//////////////////
 ///MONITOR MODPORT
-//////////////////
     modport MONITOR (
         input UCLK,
         input reset,
